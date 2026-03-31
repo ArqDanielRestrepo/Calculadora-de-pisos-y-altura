@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculadora de Altura — Norma Urbanística Colombia</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F2EB;
+    --surface: #FDFCF8;
+    --surface2: #EFECE3;
+    --ink: #1A1814;
+    --ink2: #6B6760;
+    --ink3: #9E9B96;
+    --accent: #C84B2F;
+    --accent2: #E8623D;
+    --green: #2D6A4F;
+    --green-light: #D8F3DC;
+    --amber: #7C4A00;
+    --amber-light: #FFF3E0;
+    --blue: #1A4F8A;
+    --blue-light: #E6F0FB;
+    --red: #9B1C1C;
+    --red-light: #FEE2E2;
+    --border: rgba(26,24,20,0.12);
+    --border2: rgba(26,24,20,0.06);
+    --shadow: 0 2px 24px rgba(26,24,20,0.08);
+    --radius-lg: 12px;
+    --radius-xl: 20px;
+  }
+
+  html { font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #F5F2EB;
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 320px; height: 320px;
+    border: 60px solid rgba(200,75,47,0.18);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    right: 80px; bottom: -80px;
+    width: 200px; height: 200px;
+    border: 40px solid rgba(200,75,47,0.10);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    max-width: 600px;
+  }
+  header h1 em { font-style: italic; color: var(--accent2); }
+  header p {
+    font-size: 15px;
+    color: rgba(245,242,235,0.65);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* ── TRATAMIENTO BANNER ── */
+  .tratamiento-banner {
+    background: var(--ink);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    padding: 14px 40px 20px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .tratamiento-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,242,235,0.45);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .trat-btns { display: flex; gap: 7px; flex-wrap: wrap; }
+  .trat-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(245,242,235,0.2);
+    background: transparent;
+    color: rgba(245,242,235,0.55);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .trat-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+  .trat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .trat-info {
+    font-size: 12px;
+    color: rgba(245,242,235,0.35);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  /* ── AVISO TRATAMIENTO ── */
+  .tratamiento-aviso {
+    display: none;
+    padding: 13px 18px;
+    border-radius: var(--radius-lg);
+    font-size: 13px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    border: 1px solid;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .tratamiento-aviso.visible { display: flex; }
+  .tratamiento-aviso.blue { background: var(--blue-light); border-color: #93C5FD; color: var(--blue); }
+  .tratamiento-aviso.amber { background: var(--amber-light); border-color: #FCD34D; color: var(--amber); }
+  .aviso-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── CONTAINER ── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 10px;
+    margin-top: 28px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 22px 28px 18px;
+    border-bottom: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card-icon {
+    width: 34px; height: 34px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-icon svg { width: 17px; height: 17px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+  .card-title { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .card-sub { font-size: 12px; color: var(--ink3); margin-top: 1px; }
+
+  /* ── INPUTS GRID ── */
+  .inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 640px) { .inputs-grid { grid-template-columns: 1fr; } }
+
+  .input-cell {
+    padding: 22px 26px;
+    border-right: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border2);
+  }
+  .input-cell:nth-child(3n) { border-right: none; }
+  .input-cell.last-row { border-bottom: none; }
+
+  .input-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 3px;
+  }
+  .input-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 11px;
+    line-height: 1.3;
+  }
+  .input-hint {
+    font-size: 11px;
+    color: var(--ink3);
+    margin-top: 7px;
+    line-height: 1.55;
+  }
+  .input-hint b { color: var(--amber); font-weight: 500; }
+
+  .input-with-unit {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface2);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .input-with-unit:focus-within { border-color: var(--accent); background: #fff; }
+  .input-with-unit input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 9px 13px;
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    outline: none;
+    width: 100%;
+  }
+  .input-unit {
+    padding: 0 11px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink3);
+    border-left: 1px solid var(--border2);
+    background: var(--surface2);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .slider-wrap { margin-top: 9px; }
+  .slider-wrap input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--surface2);
+    outline: none;
+    cursor: pointer;
+    border: 1px solid var(--border);
+  }
+  .slider-wrap input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(200,75,47,0.3);
+    transition: transform 0.15s;
+  }
+  .slider-wrap input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .slider-limits {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ink3);
+    margin-top: 3px;
+  }
+
+  /* ── EXTRA ROW ── */
+  .extra-row {
+    padding: 14px 26px;
+    border-top: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: var(--surface2);
+  }
+  .extra-label { font-size: 13px; color: var(--ink2); flex-shrink: 0; }
+  .btn-group { display: flex; gap: 5px; flex-wrap: wrap; }
+  .btn-opt {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--ink2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .btn-opt:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-opt.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .extra-note { font-size: 11px; color: var(--ink3); margin-left: auto; font-style: italic; }
+
+  /* ── ENTREPISO WARN ── */
+  .entrepiso-warn {
+    display: none;
+    margin: 0;
+    padding: 10px 26px;
+    background: var(--red-light);
+    border-top: 1px solid #FCA5A5;
+    font-size: 12px;
+    color: var(--red);
+    line-height: 1.55;
+  }
+  .entrepiso-warn.visible { display: block; }
+
+  /* ── RESULTS ── */
+  .results-section { margin-top: 4px; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 600px) { .results-grid { grid-template-columns: 1fr 1fr; } }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .result-card.active::before { transform: scaleX(1); }
+  .result-card.highlight { background: var(--ink); border-color: var(--ink); }
+  .result-card.highlight::before { background: var(--accent2); }
+  .rc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 5px;
+  }
+  .result-card.highlight .rc-label { color: rgba(245,242,235,0.4); }
+  .rc-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .result-card.highlight .rc-value { color: #F5F2EB; }
+  .rc-unit { font-size: 11px; color: var(--ink3); margin-top: 4px; }
+  .result-card.highlight .rc-unit { color: rgba(245,242,235,0.4); }
+
+  /* ── ALERTS ── */
+  .alert {
+    display: none;
+    padding: 11px 15px;
+    border-radius: var(--radius-lg);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 10px;
+    border: 1px solid;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .alert.visible { display: flex; }
+  .alert.warn  { background: var(--amber-light); border-color: #FCD34D; color: var(--amber); }
+  .alert.ok    { background: var(--green-light); border-color: #95D5B2; color: var(--green); }
+  .alert.info  { background: var(--blue-light);  border-color: #93C5FD; color: var(--blue); }
+  .alert.error { background: var(--red-light);   border-color: #FCA5A5; color: var(--red); }
+
+  /* ── VIZ CARD ── */
+  .viz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 26px 30px;
+    box-shadow: var(--shadow);
+  }
+  .viz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .viz-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); }
+  .viz-subtitle { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+  .viz-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 5px 13px;
+    background: var(--surface2);
+    border-radius: 20px;
+    color: var(--ink2);
+    border: 1px solid var(--border);
+  }
+
+  .building-wrap { display: flex; gap: 32px; align-items: flex-end; }
+  .building-col { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+  .building-stack {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+    width: 64px;
+    min-height: 16px;
+  }
+  .floor-block {
+    height: 15px;
+    border-radius: 2px 2px 0 0;
+    background: var(--accent);
+    transition: all 0.3s ease;
+  }
+  .floor-block:first-child { border-radius: 0; background: var(--ink); }
+  .building-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink3);
+    margin-top: 7px;
+    text-align: center;
+  }
+
+  .detail-table { flex: 1; width: 100%; }
+  .dt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border2);
+    font-size: 13px;
+    gap: 10px;
+  }
+  .dt-row:last-child { border-bottom: none; }
+  .dt-key { color: var(--ink2); }
+  .dt-step {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ink3);
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin-left: 5px;
+  }
+  .dt-val { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--ink); text-align: right; }
+  .dt-val.accent { color: var(--accent); }
+  .dt-val.warn   { color: #B45309; }
+  .dt-divider { border: none; border-top: 1.5px solid var(--border); margin: 2px 0; }
+  .dt-total-row { padding: 11px 0; }
+  .dt-total-key { font-weight: 600; color: var(--ink); font-size: 14px; }
+  .dt-total-val { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--accent); }
+  .dt-subnota { font-size: 11px; color: var(--ink3); padding-bottom: 2px; line-height: 1.55; }
+
+  /* ── NOTAS ── */
+  .notas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  @media (max-width: 600px) { .notas-grid { grid-template-columns: 1fr; } }
+
+  .nota-card {
+    padding: 16px 18px;
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .nota-card.warn  { background: var(--amber-light); border-color: #FCD34D; color: var(--amber); }
+  .nota-card.blue  { background: var(--blue-light);  border-color: #93C5FD; color: var(--blue); }
+  .nota-card.green { background: var(--green-light); border-color: #95D5B2; color: var(--green); }
+  .nota-card.dark  { background: var(--surface2);    border-color: var(--border); color: var(--ink2); }
+  .nota-card strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .nota-card.warn strong  { color: var(--amber); }
+  .nota-card.blue strong  { color: var(--blue); }
+  .nota-card.green strong { color: var(--green); }
+  .nota-card.dark strong  { color: var(--ink); }
+
+  /* ── USO BUTTONS ── */
+  .uso-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink2);
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .uso-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--surface); }
+  .uso-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,75,47,0.07); }
+  .uso-btn.active[data-uso="vivienda"]   { border-color: var(--green); color: var(--green); background: var(--green-light); }
+  .uso-btn.active[data-uso="comercio"]   { border-color: var(--blue);  color: var(--blue);  background: var(--blue-light); }
+  .uso-btn.active[data-uso="industrial"] { border-color: var(--amber); color: var(--amber); background: var(--amber-light); }
+  .uso-btn.active[data-uso="dotacional"] { border-color: #6B21A8;      color: #6B21A8;      background: #F3E8FF; }
+  .uso-icon { font-size: 15px; }
+
+  /* ── CREDITS ── */
+  .credits {
+    background: var(--ink);
+    color: rgba(245,242,235,0.55);
+    padding: 36px 40px 28px;
+    margin-top: 0;
+  }
+  .credits-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .credits-left { display: flex; flex-direction: column; gap: 4px; }
+  .credits-by {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 2px;
+  }
+  .credits-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #F5F2EB;
+    line-height: 1.1;
+  }
+  .credits-role {
+    font-size: 13px;
+    color: rgba(245,242,235,0.45);
+    margin-top: 2px;
+  }
+  .credits-divider {
+    width: 1px;
+    height: 48px;
+    background: rgba(245,242,235,0.12);
+    flex-shrink: 0;
+  }
+  .credits-right { display: flex; flex-direction: column; gap: 4px; text-align: right; }
+  .credits-collab {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,242,235,0.35);
+    margin-bottom: 2px;
+  }
+  .credits-claude {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--accent2);
+    line-height: 1.1;
+  }
+  .credits-anthropic {
+    font-size: 13px;
+    color: rgba(245,242,235,0.35);
+    margin-top: 2px;
+  }
+  .credits-bar {
+    max-width: 960px;
+    margin: 20px auto 0;
+    padding-top: 16px;
+    border-top: 1px solid rgba(245,242,235,0.08);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .credits-bar span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,242,235,0.25);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 14px 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,242,235,0.2);
+    background: var(--ink);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card       { animation: fadeUp 0.4s ease both; }
+  .results-section { animation: fadeUp 0.4s 0.08s ease both; }
+  .viz-card   { animation: fadeUp 0.4s 0.15s ease both; }
+  .notas-grid { animation: fadeUp 0.4s 0.22s ease both; }
+
+  @keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.07); }
+    100% { transform: scale(1); }
+  }
+  .num-pulse { animation: pulse 0.26s ease; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Norma Urbanística · Colombia · Ley 388/1997</div>
+  <h1>Calculadora de<br><em>Altura de Edificio</em></h1>
+  <p>Calcula el número máximo de pisos y la altura estimada de un edificio a partir del Índice de Ocupación (IO), el Índice de Construcción (IC) y el área neta del lote, conforme a la normativa urbanística colombiana.</p>
+</header>
+
+<!-- SELECTOR DE TRATAMIENTO -->
+<div class="tratamiento-banner">
+  <span class="tratamiento-label">Tratamiento:</span>
+  <div class="trat-btns">
+    <button class="trat-btn active" data-trat="desarrollo"    onclick="setTratamiento(this)">Desarrollo</button>
+    <button class="trat-btn"        data-trat="renovacion"    onclick="setTratamiento(this)">Renovación urbana</button>
+    <button class="trat-btn"        data-trat="consolidacion" onclick="setTratamiento(this)">Consolidación</button>
+    <button class="trat-btn"        data-trat="mejoramiento"  onclick="setTratamiento(this)">Mejoramiento integral</button>
+  </div>
+  <span class="trat-info" id="trat-info">Altura resultante de IC ÷ IO</span>
+</div>
+
+<div class="container">
+
+  <!-- AVISOS POR TRATAMIENTO -->
+  <div class="tratamiento-aviso blue" id="aviso-renovacion">
+    <span class="aviso-icon">ℹ</span>
+    <span>En <b>renovación urbana</b> la altura también puede ser resultante de los índices. El POT puede fijar incentivos adicionales de edificabilidad por cumplimiento de obligaciones urbanísticas (cesiones, VIS, etc.).</span>
+  </div>
+  <div class="tratamiento-aviso amber" id="aviso-consolidacion">
+    <span class="aviso-icon">⚠</span>
+    <span>En <b>consolidación</b> la altura generalmente está fijada directamente en la ficha normativa de la UPZ como número máximo de pisos según la altura predominante del sector — <b>no se deriva de IC ÷ IO</b>. Esta calculadora es solo orientativa; consulta la ficha normativa de tu polígono.</span>
+  </div>
+  <div class="tratamiento-aviso amber" id="aviso-mejoramiento">
+    <span class="aviso-icon">⚠</span>
+    <span>En <b>mejoramiento integral</b> (barrios de origen informal) las alturas permitidas son más bajas y están fijadas directamente por el POT, considerando limitaciones en vías, servicios y espacio público. El resultado de IC ÷ IO es solo referencial.</span>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="section-label">Datos de entrada</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <div>
+        <div class="card-title">Predio e índices urbanísticos (POT)</div>
+        <div class="card-sub">Ingresa el área neta del lote y los índices IO e IC definidos en el POT de tu municipio</div>
+      </div>
+    </div>
+
+    <div class="inputs-grid">
+      <!-- Área neta del lote -->
+      <div class="input-cell last-row">
+        <div class="input-label">Parámetro del lote</div>
+        <div class="input-name">Área <em>neta</em> del lote</div>
+        <div class="input-with-unit">
+          <input type="number" id="area" value="500" min="10" max="40000" step="10" oninput="calculate()" />
+          <span class="input-unit">m²</span>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" id="area-slider" min="50" max="40000" step="50" value="500"
+            oninput="document.getElementById('area').value=this.value; calculate()" />
+          <div class="slider-limits"><span>50 m²</span><span>40 000 m²</span></div>
+        </div>
+        <div class="input-hint"><b>Área neta:</b> descuenta afectaciones viales, redes primarias de servicios y áreas de protección ambiental (Dcto. 1069/2009).</div>
+      </div>
+
+      <!-- Índice de Ocupación -->
+      <div class="input-cell last-row">
+        <div class="input-label">Índice urbanístico · POT</div>
+        <div class="input-name">Índice de Ocupación <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3)">(IO)</span></div>
+        <div class="input-with-unit">
+          <input type="number" id="io" value="0.60" min="0.05" max="1.00" step="0.01" oninput="syncSlider('io'); calculate()" />
+          <span class="input-unit">ratio</span>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" id="io-slider" min="0.05" max="1.00" step="0.01" value="0.60"
+            oninput="document.getElementById('io').value=parseFloat(this.value).toFixed(2); calculate()" />
+          <div class="slider-limits"><span>0.05</span><span>1.00</span></div>
+        </div>
+        <div class="input-hint">Fracción del lote que puede ocupar la huella del edificio en primer piso bajo cubierta (Dcto. 1788/2004).</div>
+      </div>
+
+      <!-- Índice de Construcción -->
+      <div class="input-cell last-row">
+        <div class="input-label">Índice urbanístico · POT</div>
+        <div class="input-name">Índice de Construcción <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3)">(IC)</span></div>
+        <div class="input-with-unit">
+          <input type="number" id="ic" value="3.0" min="0.1" max="30" step="0.1" oninput="syncSlider('ic'); calculate()" />
+          <span class="input-unit">ratio</span>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" id="ic-slider" min="0.1" max="20" step="0.1" value="3.0"
+            oninput="document.getElementById('ic').value=parseFloat(this.value).toFixed(1); calculate()" />
+          <div class="slider-limits"><span>0.1</span><span>20</span></div>
+        </div>
+        <div class="input-hint">Veces que el área del lote puede convertirse en área construida total. IC × lote = m² totales permitidos (Dcto. 1788/2004).</div>
+      </div>
+    </div>
+
+    <!-- SELECTOR DE USO -->
+    <div class="extra-row" style="flex-direction:column; align-items:stretch; gap:12px;">
+      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <span class="extra-label" style="flex-shrink:0;">Tipo de uso:</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;" id="uso-btns">
+          <button class="uso-btn active" data-uso="vivienda"   onclick="setUso(this)">
+            <span class="uso-icon">🏠</span> Vivienda
+          </button>
+          <button class="uso-btn" data-uso="comercio"   onclick="setUso(this)">
+            <span class="uso-icon">🏪</span> Comercio / Servicios
+          </button>
+          <button class="uso-btn" data-uso="industrial" onclick="setUso(this)">
+            <span class="uso-icon">🏭</span> Industrial / Bodega
+          </button>
+          <button class="uso-btn" data-uso="dotacional" onclick="setUso(this)">
+            <span class="uso-icon">🏫</span> Dotacional
+          </button>
+        </div>
+      </div>
+
+      <!-- Ficha de uso activo -->
+      <div id="uso-ficha" style="display:flex; gap:12px; padding:12px 14px; border-radius:10px; border:1px solid; background:var(--green-light); border-color:#95D5B2; transition:all 0.25s;">
+        <div style="font-size:28px; flex-shrink:0; line-height:1;" id="uso-ficha-icon">🏠</div>
+        <div style="flex:1;">
+          <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:2px;" id="uso-ficha-titulo">Vivienda</div>
+          <div style="font-size:12px; color:var(--green); line-height:1.55;" id="uso-ficha-desc">Entrepiso máximo: <b>3.80 m</b> entre afinados superiores de placas (Decreto 159/2004 Bogotá y equivalentes municipales). Aplica a residencial unifamiliar, bifamiliar y multifamiliar.</div>
+        </div>
+        <div style="text-align:right; flex-shrink:0;">
+          <div style="font-family:'DM Mono',monospace; font-size:11px; color:var(--green); margin-bottom:2px;">límite legal</div>
+          <div style="font-family:'DM Serif Display',serif; font-size:26px; color:var(--green); line-height:1;" id="uso-limite-display">3.80 m</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDER DE ENTREPISO -->
+    <div class="extra-row" style="flex-direction:column; align-items:stretch; gap:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <span class="extra-label">Altura de entrepiso (entre placas):</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-family:'DM Mono',monospace; font-size:22px; font-weight:500; color:var(--ink);" id="hpiso-display">2.80 m</span>
+          <span id="hpiso-badge" style="font-family:'DM Mono',monospace; font-size:11px; padding:3px 10px; border-radius:20px; background:var(--green-light); color:var(--green); border:1px solid #95D5B2; transition:all 0.2s;">dentro del límite</span>
+        </div>
+      </div>
+
+      <!-- Barra con marcador de límite dinámico -->
+      <div style="position:relative; padding:0 2px;">
+        <input type="range" id="hpiso-slider" min="2.0" max="5.0" step="0.05" value="2.8"
+          oninput="updateHpiso(this.value)"
+          style="-webkit-appearance:none; width:100%; height:6px; border-radius:3px; outline:none; cursor:pointer; border:none;" />
+
+        <!-- Etiquetas dinámicas del slider -->
+        <div style="position:relative; height:22px; margin-top:2px;">
+          <span style="position:absolute; left:0; font-family:'DM Mono',monospace; font-size:10px; color:var(--ink3);">2.00 m</span>
+          <span id="limite-marker-label" style="position:absolute; font-family:'DM Mono',monospace; font-size:10px; font-weight:600; transition:left 0.3s; transform:translateX(-50%); white-space:nowrap;"></span>
+          <span style="position:absolute; right:0; font-family:'DM Mono',monospace; font-size:10px; color:var(--ink3);">5.00 m</span>
+        </div>
+      </div>
+
+      <!-- Advertencia dinámica -->
+      <div id="hpiso-warn-inline" style="display:none; font-size:12px; border-radius:8px; padding:10px 14px; border:1px solid; line-height:1.6; transition:all 0.2s;"></div>
+    </div>
+
+    <div class="entrepiso-warn" id="entrepiso-warn" style="display:none;"></div>
+
+  </div>
+
+  <!-- RESULTADOS -->
+  <div class="results-section">
+    <div class="section-label">Resultados</div>
+    <div class="results-grid">
+      <div class="result-card active">
+        <div class="rc-label">Huella máxima</div>
+        <div class="rc-value" id="v-huella">—</div>
+        <div class="rc-unit">m² · IO × lote</div>
+      </div>
+      <div class="result-card active">
+        <div class="rc-label">Área total construible</div>
+        <div class="rc-value" id="v-total">—</div>
+        <div class="rc-unit">m² · IC × lote</div>
+      </div>
+      <div class="result-card active">
+        <div class="rc-label">Pisos (IC ÷ IO)</div>
+        <div class="rc-value" id="v-pisos">—</div>
+        <div class="rc-unit">pisos enteros</div>
+      </div>
+      <div class="result-card highlight active">
+        <div class="rc-label">Altura estimada</div>
+        <div class="rc-value" id="v-altura">—</div>
+        <div class="rc-unit">pisos × entrepiso</div>
+      </div>
+    </div>
+    <div class="alert" id="alert-principal"></div>
+    <div class="alert" id="alert-secundario"></div>
+  </div>
+
+  <!-- DESGLOSE + EDIFICIO -->
+  <div class="section-label">Desglose del cálculo</div>
+  <div class="viz-card">
+    <div class="viz-header">
+      <div>
+        <div class="viz-title">Perfil del edificio y pasos del cálculo</div>
+        <div class="viz-subtitle">Cada piso en la visualización representa un nivel completo</div>
+      </div>
+      <div class="viz-badge" id="viz-badge">— pisos · — m</div>
+    </div>
+
+    <div class="building-wrap">
+      <div class="building-col">
+        <div class="building-stack" id="building-stack"></div>
+        <div class="building-label" id="building-label">— pisos</div>
+      </div>
+
+      <div class="detail-table">
+        <div class="dt-row">
+          <span class="dt-key">Área neta del lote</span>
+          <span class="dt-val" id="dt-lote">—</span>
+        </div>
+        <div class="dt-row">
+          <span class="dt-key">Huella <span class="dt-step">IO × lote</span></span>
+          <span class="dt-val" id="dt-huella">—</span>
+        </div>
+        <div class="dt-row">
+          <span class="dt-key">Área construible total <span class="dt-step">IC × lote</span></span>
+          <span class="dt-val" id="dt-total">—</span>
+        </div>
+        <hr class="dt-divider"/>
+        <div class="dt-row">
+          <span class="dt-key">Pisos resultantes <span class="dt-step">IC ÷ IO</span></span>
+          <span class="dt-val" id="dt-pisos-exactos">—</span>
+        </div>
+        <div class="dt-row">
+          <span class="dt-key">Pisos enteros (se descarta fracción)</span>
+          <span class="dt-val accent" id="dt-pisos-enteros">—</span>
+        </div>
+        <div class="dt-row">
+          <span class="dt-key">Altura de entrepiso</span>
+          <span class="dt-val" id="dt-hpiso">—</span>
+        </div>
+        <hr class="dt-divider"/>
+        <div class="dt-row dt-total-row">
+          <span class="dt-key dt-total-key">Altura total estimada <span class="dt-step">pisos × entrepiso</span></span>
+          <span class="dt-val dt-total-val" id="dt-altura">—</span>
+        </div>
+        <div class="dt-subnota" id="dt-subnota"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTAS NORMATIVAS -->
+  <div class="notas-grid">
+    <div class="nota-card warn">
+      <strong>Límite de entrepiso · Dcto. 159/2004</strong>
+      La altura máxima entre placas es <b>3.80 m</b> (medida entre afinados superiores). Si un nivel supera ese valor, se contabiliza como 2 o más pisos: uno adicional por cada 3.00 m o fracción mayor a 1.50 m.
+    </div>
+    <div class="nota-card blue">
+      <strong>Área neta del lote · Dcto. 1069/2009</strong>
+      El IO se aplica sobre el área <b>neta</b>. Debes descontar del área bruta del predio: afectaciones viales, redes primarias de servicios públicos y áreas de conservación o protección ambiental.
+    </div>
+    <div class="nota-card dark">
+      <strong>Consolidación y mejoramiento integral</strong>
+      En estos tratamientos la altura suele estar fijada directamente en la ficha normativa de la UPZ (número máximo de pisos) y <b>no se calcula con IC ÷ IO</b>. Verifica siempre con tu Curaduría Urbana o Secretaría de Planeación.
+    </div>
+    <div class="nota-card green">
+      <strong>Otros factores que limitan la altura</strong>
+      Aislamientos obligatorios (frontal, lateral, posterior), conos de aproximación aérea (RAC · Aerocivil), norma de sombras, zonas de patrimonio histórico, restricciones NSR-10 y obligaciones de cesión urbanística.
+    </div>
+  </div>
+
+</div>
+
+<div class="credits">
+  <div class="credits-inner">
+    <div class="credits-left">
+      <div class="credits-by">Desarrollado por</div>
+      <div class="credits-name">Arq. Daniel Felipe Restrepo</div>
+      <div class="credits-role">Arquitecto · Colombia</div>
+    </div>
+    <div class="credits-divider"></div>
+    <div class="credits-right">
+      <div class="credits-collab">En colaboración con</div>
+      <div class="credits-claude">Equipo Anthropic</div>
+      <div class="credits-anthropic">anthropic.com</div>
+    </div>
+  </div>
+  <div class="credits-bar">
+    <span>Calculadora de norma urbanística · Colombia · Ley 388/1997</span>
+    <span>Solo uso orientativo — consulta siempre la Curaduría Urbana o Secretaría de Planeación</span>
+  </div>
+</div>
+<footer>&#169; 2025 Arq. Daniel Felipe Restrepo &amp; Equipo Anthropic &mdash; Todos los derechos reservados</footer>
+
+<script>
+  let hPiso = 2.8;
+  let tratamiento = 'desarrollo';
+  let usoActual = 'vivienda';
+
+  const usoConfig = {
+    vivienda: {
+      label: 'Vivienda',
+      icon: '🏠',
+      limite: 3.80,
+      color: 'var(--green)',
+      colorLight: 'var(--green-light)',
+      border: '#95D5B2',
+      defaultH: 2.8,
+      desc: 'Entrepiso máximo: <b>3.80 m</b> entre afinados superiores de placas (Decreto 159/2004 Bogotá y equivalentes municipales). Aplica a residencial unifamiliar, bifamiliar y multifamiliar.',
+      warnText: (h) => `⚠ Supera los 3.80 m permitidos para vivienda (Dcto. 159/2004). Este nivel se contabilizará como <b>2 o más pisos</b>: uno por cada 3.00 m adicionales o fracción superior a 1.50 m.`,
+    },
+    comercio: {
+      label: 'Comercio / Servicios',
+      icon: '🏪',
+      limite: 4.20,
+      color: 'var(--blue)',
+      colorLight: 'var(--blue-light)',
+      border: '#93C5FD',
+      defaultH: 3.2,
+      desc: 'Entrepiso referencial: hasta <b>4.20 m</b> para locales comerciales y de servicios, según el POT municipal. Superar 3.80 m puede implicar contabilización como 2 pisos en algunos municipios — verifica con tu Curaduría.',
+      warnText: (h) => `⚠ Con ${h.toFixed(2)} m de entrepiso en uso comercial, algunos POT municipales pueden contabilizar este nivel como 2 pisos. Consulta la norma específica de tu municipio.`,
+    },
+    industrial: {
+      label: 'Industrial / Bodega',
+      icon: '🏭',
+      limite: 4.50,
+      color: 'var(--amber)',
+      colorLight: 'var(--amber-light)',
+      border: '#FCD34D',
+      defaultH: 3.5,
+      desc: 'Entrepiso referencial: hasta <b>4.50 m</b> para bodegas, industria y grandes superficies, según el POT municipal. La norma varía significativamente entre ciudades — verifica con tu Curaduría Urbana.',
+      warnText: (h) => `⚠ Con ${h.toFixed(2)} m de entrepiso en uso industrial, verifica el límite exacto en el POT de tu municipio. Superar el límite implica contabilizar ese nivel como 2 o más pisos.`,
+    },
+    dotacional: {
+      label: 'Dotacional',
+      icon: '🏫',
+      limite: 4.00,
+      color: '#6B21A8',
+      colorLight: '#F3E8FF',
+      border: '#C084FC',
+      defaultH: 3.0,
+      desc: 'Entrepiso referencial: hasta <b>4.00 m</b> para equipamientos dotacionales (educativo, salud, recreación). El límite varía según el tipo de dotacional y el POT del municipio.',
+      warnText: (h) => `⚠ Con ${h.toFixed(2)} m de entrepiso en uso dotacional, verifica el límite específico en el POT de tu municipio. Los equipamientos educativos y de salud pueden tener normas particulares.`,
+    },
+  };
+
+  const tratInfo = {
+    desarrollo:    'Altura resultante de IC ÷ IO',
+    renovacion:    'Altura resultante de IC ÷ IO',
+    consolidacion: 'Altura generalmente fijada por POT',
+    mejoramiento:  'Alturas bajas fijadas por POT'
+  };
+
+  function setUso(btn) {
+    document.querySelectorAll('.uso-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    usoActual = btn.dataset.uso;
+    const cfg = usoConfig[usoActual];
+    document.getElementById('uso-ficha-icon').textContent   = cfg.icon;
+    document.getElementById('uso-ficha-titulo').textContent = cfg.label;
+    document.getElementById('uso-ficha-titulo').style.color = cfg.color;
+    document.getElementById('uso-ficha-desc').innerHTML     = cfg.desc;
+    document.getElementById('uso-ficha-desc').style.color   = cfg.color;
+    document.getElementById('uso-limite-display').textContent = cfg.limite.toFixed(2) + ' m';
+    document.getElementById('uso-limite-display').style.color = cfg.color;
+    const ficha = document.getElementById('uso-ficha');
+    ficha.style.background  = cfg.colorLight;
+    ficha.style.borderColor = cfg.border;
+    const sl = document.getElementById('hpiso-slider');
+    sl.value = cfg.defaultH;
+    updateHpiso(cfg.defaultH);
+  }
+
+  function updateHpiso(val) {
+    hPiso = parseFloat(parseFloat(val).toFixed(2));
+    const cfg = usoConfig[usoActual];
+    const limite = cfg.limite;
+    const superaLimite = hPiso > limite;
+
+    document.getElementById('hpiso-display').textContent = hPiso.toFixed(2) + ' m';
+    document.getElementById('hpiso-slider').value = hPiso;
+
+    const badge   = document.getElementById('hpiso-badge');
+    const warnInl = document.getElementById('hpiso-warn-inline');
+
+    if (superaLimite) {
+      badge.style.background  = 'var(--red-light)';
+      badge.style.color       = 'var(--red)';
+      badge.style.borderColor = '#FCA5A5';
+      badge.textContent       = 'supera límite (' + limite.toFixed(2) + ' m)';
+      warnInl.style.display   = 'block';
+      warnInl.style.color     = 'var(--red)';
+      warnInl.style.background= 'var(--red-light)';
+      warnInl.style.borderColor = '#FCA5A5';
+      warnInl.innerHTML       = cfg.warnText(hPiso);
+    } else {
+      badge.style.background  = cfg.colorLight;
+      badge.style.color       = cfg.color;
+      badge.style.borderColor = cfg.border;
+      badge.textContent       = 'dentro del límite';
+      warnInl.style.display   = 'none';
+    }
+
+    // Gradiente del slider
+    const min = 2.0, max = 5.0;
+    const valPct = ((hPiso  - min) / (max - min)) * 100;
+    const limPct = ((limite - min) / (max - min)) * 100;
+    let grad;
+    if (!superaLimite) {
+      grad = `linear-gradient(to right, ${cfg.color} 0%, ${cfg.color} ${valPct.toFixed(1)}%, #D1D5DB ${valPct.toFixed(1)}%, #FCD34D ${limPct.toFixed(1)}%, #D1D5DB ${limPct.toFixed(1)}%, #D1D5DB 100%)`;
+    } else {
+      grad = `linear-gradient(to right, ${cfg.color} 0%, ${cfg.color} ${limPct.toFixed(1)}%, var(--red) ${limPct.toFixed(1)}%, var(--red) ${valPct.toFixed(1)}%, #D1D5DB ${valPct.toFixed(1)}%, #D1D5DB 100%)`;
+    }
+    document.getElementById('hpiso-slider').style.background = grad;
+
+    // Marcador de límite
+    const marker = document.getElementById('limite-marker-label');
+    marker.style.left  = limPct.toFixed(1) + '%';
+    marker.textContent = '▲ ' + limite.toFixed(2) + ' m (límite ' + cfg.label.split('/')[0].trim().toLowerCase() + ')';
+    marker.style.color = superaLimite ? 'var(--red)' : cfg.color;
+    calculate();
+  }
+
+  function setTratamiento(btn) {
+    document.querySelectorAll('.trat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    tratamiento = btn.dataset.trat;
+    document.getElementById('trat-info').textContent = tratInfo[tratamiento];
+    ['renovacion','consolidacion','mejoramiento'].forEach(t => {
+      const el = document.getElementById('aviso-' + t);
+      if (el) el.classList.toggle('visible', tratamiento === t);
+    });
+    calculate();
+  }
+
+  function syncSlider(id) {
+    document.getElementById(id + '-slider').value = document.getElementById(id).value;
+  }
+
+  function animateValue(el, val) {
+    el.classList.remove('num-pulse');
+    void el.offsetWidth;
+    el.classList.add('num-pulse');
+    el.textContent = val;
+  }
+
+  function setAlert(id, type, html) {
+    const el = document.getElementById(id);
+    el.className = 'alert' + (type ? ' ' + type + ' visible' : '');
+    el.innerHTML = html || '';
+  }
+
+  function fmt(n) { return Math.round(n).toLocaleString('es-CO'); }
+
+  function calculate() {
+    const area = parseFloat(document.getElementById('area').value) || 0;
+    const io   = parseFloat(document.getElementById('io').value)   || 0;
+    const ic   = parseFloat(document.getElementById('ic').value)   || 0;
+    const cfg  = usoConfig[usoActual];
+
+    document.getElementById('area-slider').value = Math.min(area, 40000);
+    document.getElementById('io-slider').value   = io;
+    document.getElementById('ic-slider').value   = Math.min(ic, 20);
+
+    if (area <= 0 || io <= 0 || ic <= 0) return;
+
+    const huella           = area * io;
+    const totalConstruible = area * ic;
+    const pisosExactos     = ic / io;
+    const pisosEnteros     = Math.floor(pisosExactos);
+    const fraccion         = pisosExactos - pisosEnteros;
+    const altura           = pisosEnteros * hPiso;
+    const superaLimite     = hPiso > cfg.limite;
+
+    animateValue(document.getElementById('v-huella'), fmt(huella) + ' m²');
+    animateValue(document.getElementById('v-total'),  fmt(totalConstruible) + ' m²');
+    animateValue(document.getElementById('v-pisos'),  pisosEnteros + (fraccion > 0.01 ? ' (' + pisosExactos.toFixed(2) + ')' : ''));
+    animateValue(document.getElementById('v-altura'), altura.toFixed(1) + ' m');
+
+    document.getElementById('dt-lote').textContent          = fmt(area) + ' m²';
+    document.getElementById('dt-huella').textContent        = fmt(huella) + ' m²';
+    document.getElementById('dt-total').textContent         = fmt(totalConstruible) + ' m²';
+    document.getElementById('dt-pisos-exactos').textContent = pisosExactos.toFixed(3);
+    document.getElementById('dt-pisos-enteros').textContent = pisosEnteros + ' pisos';
+
+    const hPisoEl = document.getElementById('dt-hpiso');
+    hPisoEl.textContent = hPiso.toFixed(2) + ' m' + (superaLimite ? '  ⚠ supera límite ' + cfg.label : '');
+    hPisoEl.className   = 'dt-val' + (superaLimite ? ' warn' : '');
+
+    document.getElementById('dt-altura').textContent = altura.toFixed(2) + ' m';
+    document.getElementById('dt-subnota').textContent = pisosEnteros + ' pisos × ' + hPiso.toFixed(2) + ' m/piso = ' + altura.toFixed(2) + ' m'
+      + (fraccion > 0.01 ? '  |  Fracción descartada: ' + (fraccion * 100).toFixed(1) + '% de piso no genera nivel completo.' : '');
+
+    document.getElementById('viz-badge').textContent = pisosEnteros + ' pisos · ' + altura.toFixed(1) + ' m';
+    const stack = document.getElementById('building-stack');
+    stack.innerHTML = '';
+    for (let i = 0; i < Math.min(pisosEnteros, 45); i++) {
+      const b = document.createElement('div');
+      b.className = 'floor-block';
+      b.title = 'Piso ' + (i + 1);
+      stack.appendChild(b);
+    }
+    document.getElementById('building-label').textContent = pisosEnteros + (pisosEnteros === 1 ? ' piso' : ' pisos');
+
+    setAlert('alert-principal', null, '');
+    setAlert('alert-secundario', null, '');
+
+    if (pisosExactos < 1) {
+      setAlert('alert-principal', 'error', '✖ &nbsp;El IC es menor que el IO: no es posible completar ni un piso. Verifica los índices asignados en el POT.');
+    } else if (tratamiento === 'consolidacion' || tratamiento === 'mejoramiento') {
+      setAlert('alert-principal', 'warn', '⚠ &nbsp;En el tratamiento de <b>' + tratamiento + '</b> la altura generalmente está fijada directamente por el POT, no derivada de IC ÷ IO. Consulta la ficha normativa de tu UPZ o polígono.');
+    } else if (pisosEnteros >= 30) {
+      setAlert('alert-principal', 'warn', '⚠ &nbsp;Edificios de ' + pisosEnteros + ' pisos requieren diseño estructural especial bajo la <b>NSR-10</b> y revisión técnica independiente obligatoria.');
+    } else if (pisosEnteros >= 6) {
+      setAlert('alert-principal', 'info', 'ℹ &nbsp;Para edificios de ' + pisosEnteros + ' pisos (' + cfg.label + ') verifica aislamientos laterales progresivos y norma de sombras del POT municipal.');
+    } else if (pisosEnteros <= 2) {
+      setAlert('alert-principal', 'ok', '✔ &nbsp;Altura de ' + pisosEnteros + ' piso' + (pisosEnteros > 1 ? 's' : '') + ' compatible con uso <b>' + cfg.label + '</b>. Verifica aislamientos mínimos y antejardín del POT.');
+    }
+
+    if (superaLimite) {
+      setAlert('alert-secundario', 'warn', '⚠ &nbsp;El entrepiso de ' + hPiso.toFixed(2) + ' m supera el límite referencial de <b>' + cfg.limite.toFixed(2) + ' m</b> para uso <b>' + cfg.label + '</b>. Según la norma municipal, ese nivel puede contabilizarse como 2 o más pisos, incrementando la altura real del edificio.');
+    }
+  }
+
+  updateHpiso(2.8);
+  calculate();
+</script>
+</body>
+</html>
